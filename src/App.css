@@ -1,0 +1,167 @@
+#root {
+  width: 100%;
+}
+
+.app-shell {
+  width: min(720px, 92vw);
+  margin: 32px auto;
+  padding: 0 20px;
+}
+
+.card {
+  border-top: 1px solid #e7ebf2;
+  border-bottom: 1px solid #e7ebf2;
+  padding: 28px 0;
+}
+
+.section-title {
+  margin: 0 0 18px;
+  color: #1f2633;
+  font-size: clamp(1.65rem, 1.6vw + 1rem, 2.375rem);
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.radio-group {
+  display: grid;
+  gap: 10px;
+}
+
+.radio-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  color: #26303f;
+  font-size: clamp(1.2rem, 1.4vw + 0.7rem, 2rem);
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.radio-row.selected {
+  background: #eef4fb;
+}
+
+.radio-row input[type='radio'] {
+  width: 24px;
+  height: 24px;
+  accent-color: #3178d8;
+  margin: 0;
+}
+
+.list-panel {
+  animation: fade-slide-in 220ms ease both;
+}
+
+.list-panel.is-updating {
+  opacity: 0.86;
+}
+
+.customer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.customer-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.customer-row:last-child {
+  margin-bottom: 0;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #edf3fa;
+  color: #2f78d7;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.customer-name {
+  margin: 0;
+  color: #2b3340;
+  font-size: clamp(1.15rem, 1.5vw + 0.7rem, 2.125rem);
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.customer-role {
+  margin: 2px 0 0;
+  color: #8a919d;
+  font-size: clamp(1rem, 1.1vw + 0.65rem, 1.75rem);
+  line-height: 1.2;
+}
+
+.status-message {
+  margin: 14px 0;
+  color: #4a5466;
+  font-size: 16px;
+}
+
+.status-message.error {
+  color: #b42318;
+}
+
+.status-copy {
+  margin: 0;
+}
+
+.retry-button {
+  margin-top: 8px;
+  border: 1px solid #b42318;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #b42318;
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.retry-button:hover {
+  background: #fef3f2;
+}
+
+.retry-button:focus-visible {
+  outline: 2px solid #3178d8;
+  outline-offset: 2px;
+}
+
+.empty-state {
+  margin: 12px 0 0;
+  color: #8a919d;
+  font-size: 20px;
+}
+
+@keyframes fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radio-row {
+    transition: none;
+  }
+
+  .list-panel {
+    animation: none;
+  }
+}
