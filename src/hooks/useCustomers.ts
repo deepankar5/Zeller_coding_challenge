@@ -1,28 +1,28 @@
-import { useQuery } from '@tanstack/react-query'
-import { fetchZellerCustomers } from '../services/zellerApi'
-import type { Customer } from '../types/customer'
+// Updated useCustomers.ts for parameterized query support
 
-interface UseCustomersResult {
-  customers: Customer[]
-  isLoading: boolean
-  isRefetching: boolean
-  error: string | null
-  retry: () => void
-}
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-export function useCustomers(): UseCustomersResult {
-  const { data, error, isPending, isFetching, refetch } = useQuery({
-    queryKey: ['zellerCustomers'],
-    queryFn: ({ signal }) => fetchZellerCustomers(signal),
-  })
+const useCustomers = (role: string, limit: number, offset: number) => {
+    const [customers, setCustomers] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  return {
-    customers: data ?? [],
-    isLoading: isPending,
-    isRefetching: isFetching && !isPending,
-    error: error instanceof Error ? error.message : null,
-    retry: () => {
-      void refetch()
-    },
-  }
-}
+    useEffect(() => {
+        const fetchCustomers = async () => {
+            try {
+                const response = await axios.get(`/api/customers?role=${role}&limit=${limit}&offset=${offset}`);
+                setCustomers(response.data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching customers:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchCustomers();
+    }, [role, limit, offset]);
+
+    return { customers, loading };
+};
+
+export default useCustomers;
