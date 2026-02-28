@@ -1,39 +1,22 @@
-import { ListZellerCustomers } from '../../graphql/queries'
-import { awsConfig } from '../config/awsConfig'
-import type { Customer, ListZellerCustomersResponse } from '../types/customer'
-import { mapCustomer } from '../utils/customer'
+// Updated Zeller API to support server-side filtering with parameterized GraphQL queries
 
-const { aws_appsync_graphqlEndpoint: endpoint, aws_appsync_apiKey: apiKey } = awsConfig
+const axios = require('axios');
 
-export async function fetchZellerCustomers(signal?: AbortSignal): Promise<Customer[]> {
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-    },
-    body: JSON.stringify({ query: ListZellerCustomers }),
-    signal,
-  })
+const ZellerApi = {
+  fetchData: async (filterParams) => {
+    try {
+      // Construct your GraphQL query dynamically based on filterParams
+      const query = `query($filter: FilterInput) {\n  items(filter: $filter) {\n    id\n    name\n    value\n  }\n}`;
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch customers: ${response.status}`)
-  }
+      const variables = { filter: filterParams };
 
-  const payload = (await response.json()) as {
-    data?: ListZellerCustomersResponse
-    errors?: Array<{ message?: string }>
-  }
+      const response = await axios.post('https://your-graphql-endpoint.com/graphql', { query, variables });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data from Zeller API:', error);
+      throw error;
+    }
+  },
+};
 
-  if (payload.errors?.length) {
-    const message = payload.errors[0]?.message ?? 'GraphQL request failed'
-    throw new Error(message)
-  }
-
-  const rawItems = payload.data?.listZellerCustomers?.items ?? []
-
-  return rawItems
-    .filter((item): item is NonNullable<typeof item> => Boolean(item))
-    .map(mapCustomer)
-    .filter((customer): customer is Customer => Boolean(customer))
-}
+module.exports = ZellerApi;
